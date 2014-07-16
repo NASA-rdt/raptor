@@ -18,10 +18,11 @@ def apply_deadzone(x, deadzone, scale):
     if x < 0:
         return (scale * min(0,x+deadzone)) / (32768-deadzone)
     return (scale * max(0,x-deadzone)) / (32768-deadzone)
-
 def event_stream(deadzone=0,scale=32768):
+
     _data = None
-    subprocess = popen('xboxdrv','r',65536)
+    print 'To open the XBOX controller you must have admin rights...'
+    subprocess = popen('sudo xboxdrv --detach-kernel-driver','r',65536)
     j=0
     k=0
     while (True):
