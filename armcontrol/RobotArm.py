@@ -7,12 +7,17 @@
 # USB commands reference from http://notbrainsurgery.livejournal.com/38622.html
 # See more details on the project at http://mattdyson.org/projects/robotarm
 
+# Modified for NASA GSFC Summer internship 2014 by Aaron Neely
+
 import usb.core as usbdev
 import time
 import RPi.GPIO as GPIO
 
+#  Controller status green and blue pins
 greenLightPin=23
 blueLightPin=24
+
+#  GPIO Setup for lights
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 GPIO.setup(greenLightPin,GPIO.OUT)
@@ -58,12 +63,17 @@ class RobotArm:
 		bytes[0] = (self.shoulder<<6) + (self.elbow<<4) + (self.wrist<<2) + self.grip
 		bytes[1] = self.rotate
 		bytes[2] = self.light
+
+		# If no motors are moving, turn the controller status light green
 		if bytes == [0,0,0] or bytes == [0,0,1]:
 		    	GPIO.output(greenLightPin,1)
 		    	GPIO.output(blueLightPin,0)
+                # If motors are moving, turn the controller status light blue
 		else:
 		    	GPIO.output(greenLightPin,0)
 		   	GPIO.output(blueLightPin,1)
+		# Prevent the controller status light from turning on before
+		# anything is sent
 		if self.first == 1:
 			GPIO.output(greenLightPin,0)
 			self.first = 0
