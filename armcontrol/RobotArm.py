@@ -12,6 +12,7 @@
 import usb.core as usbdev
 import time
 import RPi.GPIO as GPIO
+import raptorStatusLights as light
 
 #  Controller status green and blue pins
 greenLightPin=23
@@ -66,16 +67,14 @@ class RobotArm:
 
 		# If no motors are moving, turn the controller status light green
 		if bytes == [0,0,0] or bytes == [0,0,1]:
-		    	GPIO.output(greenLightPin,1)
-		    	GPIO.output(blueLightPin,0)
+		    	light.status_lights('controller','green')
                 # If motors are moving, turn the controller status light blue
 		else:
-		    	GPIO.output(greenLightPin,0)
-		   	GPIO.output(blueLightPin,1)
+                        light.status_lights('controller','blue')
 		# Prevent the controller status light from turning on before
 		# anything is sent
 		if self.first == 1:
-			GPIO.output(greenLightPin,0)
+			light.status_lights('controller','off')
 			self.first = 0
 		#print self.first
 		#print bytes
