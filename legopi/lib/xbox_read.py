@@ -2,31 +2,11 @@
 
 # Pull libraries
 import time
+import glob
 import os
 from sys import stdin
 import re
-import RPi.GPIO as GPIO
 from evdev import InputDevice, categorize, ecodes
-
-#  Controller status green and blue pins
-greenLightPin=23
-blueLightPin=24
-
-#  GPIO setup for lights
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(greenLightPin,GPIO.OUT)
-GPIO.setup(blueLightPin,GPIO.OUT)
-
-#Start up xboxdrv driver
-#os.system('(sudo xboxdrv -d -D -s --dbus disabled)&')
-#time.sleep(2)
-
-#Setup for evdev
-#dev = InputDevice('/dev/input/event2')
-#print(dev)
-
-#s = re.compile('[ :]')
 
 class Event:
     def __init__(self,key,value,old_value):
@@ -65,31 +45,30 @@ def apply_deadzone(x, deadzone, scale):
     return (scale * max(0,x-deadzone)) / (32768-deadzone)
 
 def event_stream(deadzone=0,scale=32768):
-    #_data = None
     old_value=None
     x=0
     
     #Start up xboxdrv driver
     subprocess = os.popen('sudo xboxdrv -d -D -v --dbus disabled','r',65536)
     time.sleep(1)
+    
     #Setup for evdev
-    dev = InputDevice('/dev/input/event2')
-    print(dev)
-
+    devicesNow = glob.glob('/dev/input/event*')
+    found = False
+    device = None
+    for dev in devicesNow:
+        device = InputDevice(dev)
+        if 'Xbox' in device.name:
+            print 'Found:',device.name,'on',dev
+            found = True;
+            break
+    if not found:
+        print 'Xbox controller not found'
+        return
+    
     while True:
-        line = subprocess.readline()
-        # Turn off controller status light if controller is disconnected
-        if 'failed' in line:
-	    GPIO.output(greenLightPin,GPIO.LOW)
-	    print (line)
-            #raise ValueError(line)
-        #Turn on controller status light if controller is reconnected
-	if 'controller connected' in line:
-	    GPIO.output(greenLightPin,GPIO.HIGH)
-	    print(line)
-
         #Run loop for each new evdev event
-        for evdev_event in dev.read_loop():
+        for evdev_event in device.read_loop():
             value = None
             #Convert evdev event code into xbox key
             key=code2key(evdev_event.code)
@@ -117,29 +96,6 @@ def event_stream(deadzone=0,scale=32768):
                 #print(value)
                 yield event
                 old_value = value
-
-
-
-
-
-
-
-
-#        data = filter(bool,s.split(line[:-1]))
-#
-#	if len(data)==42:
-#           # Break input string into a data dict
-#            data = { data[x]:int(data[x+1]) for x in range(0,len(data),2) }
-#	    if not _data:
-#                _data = data
-#                continue
-#            for key in data:
-#                if key=='X1' or key=='X2' or key=='Y1' or key=='Y2':
-#                    data[key] = apply_deadzone(data[key],deadzone,scale)
-#                if data[key]==_data[key]: continue
-#                event = Event(key,data[key],_data[key])
-#                yield event
-#            _data = data
 
 # Appendix: Keys
 # --------------

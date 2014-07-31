@@ -15,19 +15,6 @@ from armcontrol import RobotArm
 # So we can catch Ctrl+C
 import signal
 import sys
-import RPi.GPIO as GPIO
-
-# Uncomment for light control
-
-#  Controller status green and blue pins
-#greenLightPin=23
-#blueLightPin=24
-
-#  GPIO setup for lights
-#GPIO.setwarnings(False)
-#GPIO.setmode(GPIO.BCM)
-#GPIO.setup(greenLightPin,GPIO.OUT)
-#GPIO.setup(blueLightPin,GPIO.OUT)
 
 # The deadzone within which we ignore inputs, approximately 1/3 of total possible input
 DEADZONE = 12000
