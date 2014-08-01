@@ -12,7 +12,7 @@ def goTo( _from, delta,whichmethod = 0, damp = 0.0):
     if whichmethod == 0:
         return DLSqr(_from, delta, damp)
 
-    else whichmethod == 1:
+    else:
 		return FullIK(_from[0],_from[1],_from[2],_from[3],_from[4],_from[5],_from[6],delta[0],delta[1],delta[2],delta[3],delta[4],delta[5])
 
 
