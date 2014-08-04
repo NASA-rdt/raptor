@@ -44,13 +44,13 @@ def IK(th1, th2, th3, th4, th5, th6, th7, deltax, deltay, deltaz, deltar, deltap
 
 def NewAngles(th1, th2, th3, th4, th5, th6, th7, DelAngles):
     new = np.empty([7, 1])
-    new[0] = th1 + DelAngles[0, 0]
-    new[1] = th2 + DelAngles[1, 0]
-    new[2] = th3 + DelAngles[2, 0]
-    new[3] = th4 + DelAngles[3, 0]
-    new[4] = th5 + DelAngles[4, 0]
-    new[5] = th6 + DelAngles[5, 0]
-    new[6] = th7 + DelAngles[6, 0]
+    new[0, 0] = th1 + DelAngles[0]
+    new[1, 0] = th2 + DelAngles[1]
+    new[2, 0] = th3 + DelAngles[2]
+    new[3, 0] = th4 + DelAngles[3]
+    new[4, 0] = th5 + DelAngles[4]
+    new[5, 0] = th6 + DelAngles[5]
+    new[6, 0] = th7 + DelAngles[6]
     return new
 
 
@@ -60,7 +60,7 @@ def DLSqr(theta, delta):
     for i in range (0,5):
         D[i, 0] = delta[i]
     DT = linalg.lsqr(J, D)
-    DelAngles = DT[1]
+    DelAngles = DT[0]
     new = NewAngles(theta[0], theta[1], theta[2], theta[3], theta[4], theta[5], theta[6],DelAngles)
     return new
 
