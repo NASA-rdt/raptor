@@ -1,10 +1,13 @@
 import numpy as np
 import math as m
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+
 
 
 #prints out end effector position given 7 dimensional array with radian values for motor positions
 #as defined by DH parameters
-def FK(angles):
+def FK(angles,plot=0):
 	#building other dh parameters
 	theta = np.empty([8,1])
 	for i in range (0,6):
@@ -26,22 +29,22 @@ def FK(angles):
 
 
 	i=0
-	T1[0, 0] = np.cos(theta[i])
-	T1[0, 1] =-np.sin(theta[i])
-	T1[0, 2] = 0
-	T1[0, 3] = a[i]
-	T1[1, 0] = np.sin(theta[i]) * np.cos(alpha[i])
-	T1[1, 1] = np.cos(theta[i]) * np.cos(alpha[i])
+	T1[0, 0] =  np.cos(theta[i])
+	T1[0, 1] = -np.sin(theta[i])
+	T1[0, 2] =  0
+	T1[0, 3] =  a[i]
+	T1[1, 0] =  np.sin(theta[i]) * np.cos(alpha[i])
+	T1[1, 1] =  np.cos(theta[i]) * np.cos(alpha[i])
 	T1[1, 2] = -np.sin(alpha[i])
 	T1[1, 3] = -np.sin(alpha[i]) * d[i]
-	T1[2, 0] = np.sin(theta[i]) * np.sin(alpha[i])
-	T1[2, 1] = np.cos(theta[i]) * np.sin(alpha[i])
-	T1[2, 2] = np.cos(alpha[i])
-	T1[2, 3] = np.cos(alpha[i]) * d[i]
-	T1[3, 0] = 0
-	T1[3, 1] = 0
-	T1[3, 2] = 0
-	T1[3, 3] = 1
+	T1[2, 0] =  np.sin(theta[i]) * np.sin(alpha[i])
+	T1[2, 1] =  np.cos(theta[i]) * np.sin(alpha[i])
+	T1[2, 2] =  np.cos(alpha[i])
+	T1[2, 3] =  np.cos(alpha[i]) * d[i]
+	T1[3, 0] =  0
+	T1[3, 1] =  0
+	T1[3, 2] =  0
+	T1[3, 3] =  1
 	
 
 
@@ -186,10 +189,19 @@ def FK(angles):
 	P6 = np.dot(P5,T6)
 	P7 = np.dot(P6,T7)
 	P8 = np.dot(P7,T8)
-	position = np.empty([3,1])
 	
 
-	for i in range (0,2):
-		position[i,0] = P8[i, 3]
+	position = np.empty([3,1])
+	position[0,0] = P8[0,3]
+	position[1,0] = P8[1,3]
+	position[2,0] = P8[2,3]
 
-	return P8
+
+	#for j in range (0,2):
+	#	position[j,0] = P8[j, 3]
+
+
+
+
+
+	return position
