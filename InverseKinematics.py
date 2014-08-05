@@ -9,7 +9,7 @@ import ForwardKinematics as FKin
 #optional:
 #0 = damped least square (default), 1 = old method
 #damp is damped least square dampening coefficient, default is 0
-def goTo( _from, delta, plot = 0, damp = 0.0, whichmethod = 0):
+def goTo( _from, delta, plot = 0, damp = 0.1, whichmethod = 0):
     if whichmethod == 0:
         theta = DLSqr(_from, delta, damp)
     else:
