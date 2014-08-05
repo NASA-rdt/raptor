@@ -9,7 +9,7 @@ import ForwardKinematics as FKin
 #optional:
 #0 = damped least square (default), 1 = old method
 #damp is damped least square dampening coefficient, default is 0
-def goTo( _from, delta,plot= 0, damp = 0.0, whichmethod = 0):
+def goTo( _from, delta, plot = 0, damp = 0.0, whichmethod = 0):
     if whichmethod == 0:
         theta = DLSqr(_from, delta, damp)
     else:
@@ -70,6 +70,14 @@ def DLSqr(theta, delta, damp):
         D[i, 0] = delta[i]
     DT = linalg.lsqr(J, D, damp)
     DelAngles = DT[0]
+
+    for i in range (0,6):
+        if DelAngles[i] > (np.pi/4):
+            print 'angle change too large'
+            return theta
+        if DelAngles[i] < (-np.pi/4):
+            print 'angle change too large'
+            return theta
     new = NewAngles(theta[0], theta[1], theta[2], theta[3], theta[4], theta[5], theta[6],DelAngles)
     return new
 
