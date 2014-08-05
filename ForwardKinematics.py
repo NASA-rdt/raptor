@@ -233,7 +233,7 @@ def FK(angles,plot=0):
 
 	if plot == 1:
 		mpl.rcParams['legend.fontsize'] = 10
-		fig = plt.figure()
+		fig = plt.figure(1)
 		ax = fig.gca(projection = '3d')
 
 		x = []

@@ -1,6 +1,7 @@
 import numpy as np
 import math as m
 import scipy.sparse.linalg as linalg
+import ForwardKinematics as FKin
 
 
 #a wrapper to turn ugly into pretty, 
@@ -8,11 +9,16 @@ import scipy.sparse.linalg as linalg
 #optional:
 #0 = damped least square (default), 1 = old method
 #damp is damped least square dampening coefficient, default is 0
-def goTo( _from, delta,plot= 0,whichmethod = 0):
+def goTo( _from, delta,plot= 0, whichmethod = 0):
     if whichmethod == 0:
-        return DLSqr(_from, delta)
+        theta = DLSqr(_from, delta)
     else:
-		return FullIK(_from[0],_from[1],_from[2],_from[3],_from[4],_from[5],_from[6],delta[0],delta[1],delta[2],delta[3],delta[4],delta[5])
+		theta =  FullIK(_from[0],_from[1],_from[2],_from[3],_from[4],_from[5],_from[6],delta[0],delta[1],delta[2],delta[3],delta[4],delta[5])
+
+    if plot == 1:
+        endeffectorposition = FKin.FK(theta,1)
+
+    return theta
 
 
 
@@ -24,6 +30,7 @@ def goTo( _from, delta,plot= 0,whichmethod = 0):
 #th1-7 are current angles (radians)
 #delta_ are wanted changes of endeffector (x, y, z positions (inches), roll, pitch, yaw angles (radians))	
 def FullIK(th1,th2,th3,th4,th5,th6,th7,deltax,deltay,deltaz,deltar,deltap,deltaw):
+    print 'hey doofus, for some reason you\'re using the old IK'
     DelAngles = IK(th1, th2, th3, th4, th5, th6, th7, deltax, deltay, deltaz, deltar, deltap, deltaw)
     new = NewAngles(th1, th2, th3, th4, th5, th6, th7, DelAngles)
     return new
