@@ -235,6 +235,10 @@ def FK(angles,plot=0):
 		mpl.rcParams['legend.fontsize'] = 10
 		fig = plt.figure(1)
 		ax = fig.gca(projection = '3d')
+		ax.set_xlabel('X')
+		ax.set_ylabel('Y')
+		ax.set_zlabel('Z')
+
 
 		x = []
 		y = []
@@ -244,7 +248,6 @@ def FK(angles,plot=0):
 			y.append(position[1,i])
 			z.append(position[2,i])
 		ax.plot(x,y,z,label='Robot Arm')
-		ax.legend()
 		plt.show(block = False)
 
 
