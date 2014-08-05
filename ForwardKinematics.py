@@ -246,8 +246,6 @@ def FK(angles,plot=0):
 		ax.plot(x,y,z,label='Robot Arm')
 		ax.legend()
 		plt.show(block = False)
-		print x
-		print y
-		print z
+
 
 	return position[:,7]
