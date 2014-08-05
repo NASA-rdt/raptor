@@ -24,7 +24,6 @@ def goTo( _from, delta, plot = 0, damp = 0.1, whichmethod = 0):
 
 
 
-
 ####FullIK is legacy: DLSqr is new
 ####use FullIK for the actual inverse kinematics.
 #th1-7 are current angles (radians)
