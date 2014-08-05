@@ -9,9 +9,9 @@ import ForwardKinematics as FKin
 #optional:
 #0 = damped least square (default), 1 = old method
 #damp is damped least square dampening coefficient, default is 0
-def goTo( _from, delta,plot= 0, whichmethod = 0):
+def goTo( _from, delta,plot= 0, damp = 0.0, whichmethod = 0):
     if whichmethod == 0:
-        theta = DLSqr(_from, delta)
+        theta = DLSqr(_from, delta, damp)
     else:
 		theta =  FullIK(_from[0],_from[1],_from[2],_from[3],_from[4],_from[5],_from[6],delta[0],delta[1],delta[2],delta[3],delta[4],delta[5])
 
@@ -63,12 +63,12 @@ def NewAngles(th1, th2, th3, th4, th5, th6, th7, DelAngles):
     return new
 
 
-def DLSqr(theta, delta):
+def DLSqr(theta, delta, damp):
     J = jacbuild(theta[0], theta[1], theta[2], theta[3], theta[4], theta[5], theta[6])
     D=np.empty([6,1])
     for i in range (0,5):
         D[i, 0] = delta[i]
-    DT = linalg.lsqr(J, D)
+    DT = linalg.lsqr(J, D, damp)
     DelAngles = DT[0]
     new = NewAngles(theta[0], theta[1], theta[2], theta[3], theta[4], theta[5], theta[6],DelAngles)
     return new
