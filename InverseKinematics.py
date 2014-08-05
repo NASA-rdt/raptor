@@ -8,16 +8,18 @@ import scipy.sparse.linalg as linalg
 #optional:
 #0 = damped least square (default), 1 = old method
 #damp is damped least square dampening coefficient, default is 0
-def goTo( _from, delta,whichmethod = 0):
+def goTo( _from, delta,plot= 0,whichmethod = 0):
     if whichmethod == 0:
         return DLSqr(_from, delta)
-
     else:
 		return FullIK(_from[0],_from[1],_from[2],_from[3],_from[4],_from[5],_from[6],delta[0],delta[1],delta[2],delta[3],delta[4],delta[5])
 
 
 
 
+
+
+####FullIK is legacy: DLSqr is new
 ####use FullIK for the actual inverse kinematics.
 #th1-7 are current angles (radians)
 #delta_ are wanted changes of endeffector (x, y, z positions (inches), roll, pitch, yaw angles (radians))	
@@ -185,5 +187,3 @@ def jacbuild(th1=0.2, th2=-1.3, th3=0.8, th4=1.2, th5=-0.6, th6=1.9, th7=-0.8, s
     if show == 1:
         print J
     return J
-
-

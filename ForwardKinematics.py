@@ -1,7 +1,9 @@
 import numpy as np
 import math as m
-import matplotlib.pyplot as plt
+import matplotlib as mpl
 from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.pyplot as plt
+
 
 
 
@@ -189,19 +191,63 @@ def FK(angles,plot=0):
 	P6 = np.dot(P5,T6)
 	P7 = np.dot(P6,T7)
 	P8 = np.dot(P7,T8)
-	
 
-	position = np.empty([3,1])
-	position[0,0] = P8[0,3]
-	position[1,0] = P8[1,3]
-	position[2,0] = P8[2,3]
+	position = np.empty([3,8])
+
+	position[0, 0] = P1[0,3]
+	position[1, 0] = P1[1,3]
+	position[2, 0] = P1[2,3]
+
+	position[0, 1] = P2[0,3]
+	position[1, 1] = P2[1,3]
+	position[2, 1] = P2[2,3]
+
+	position[0, 2] = P3[0,3]
+	position[1, 2] = P3[1,3]
+	position[2, 2] = P3[2,3]
+
+	position[0, 3] = P4[0,3]
+	position[1, 3] = P4[1,3]
+	position[2, 3] = P4[2,3]
+
+	position[0, 4] = P5[0,3]
+	position[1, 4] = P5[1,3]
+	position[2, 4] = P5[2,3]
+
+	position[0, 5] = P6[0,3]
+	position[1, 5] = P6[1,3]
+	position[2, 5] = P6[2,3]
+
+	position[0, 6] = P7[0,3]
+	position[1, 6] = P7[1,3]
+	position[2, 6] = P7[2,3]
+
+	position[0, 7] = P8[0,3]
+	position[1, 7] = P8[1,3]
+	position[2, 7] = P8[2,3]
 
 
 	#for j in range (0,2):
 	#	position[j,0] = P8[j, 3]
 
 
+	if plot == 1:
+		mpl.rcParams['legend.fontsize'] = 10
+		fig = plt.figure()
+		ax = fig.gca(projection = '3d')
 
+		x = []
+		y = []
+		z = []
+		for i in range (0, 8):
+			x.append(position[0,i])
+			y.append(position[1,i])
+			z.append(position[2,i])
+		ax.plot(x,y,z,label='Robot Arm')
+		ax.legend()
+		plt.show(block = False)
+		print x
+		print y
+		print z
 
-
-	return position
+	return position[:,7]
