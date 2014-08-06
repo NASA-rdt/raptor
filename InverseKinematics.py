@@ -1,3 +1,4 @@
+from __future__ import division
 import numpy as np
 import math as m
 import scipy.sparse.linalg as linalg
@@ -63,22 +64,27 @@ def NewAngles(th1, th2, th3, th4, th5, th6, th7, DelAngles):
 
 
 def DLSqr(theta, delta, damp):
-    J = jacbuild(theta[0], theta[1], theta[2], theta[3], theta[4], theta[5], theta[6])
-    D=np.empty([6,1])
-    for i in range (0,5):
-        D[i, 0] = delta[i]
-    DT = linalg.lsqr(J, D, damp)
-    DelAngles = DT[0]
+    try:
+        J = jacbuild(theta[0], theta[1], theta[2], theta[3], theta[4], theta[5], theta[6])
+        D=np.empty([6,1])
+        for i in range (0,5):
+            D[i, 0] = delta[i]
+        DT = linalg.lsqr(J, D, damp)
+        DelAngles = DT[0]
 
-    for i in range (0,6):
-        if DelAngles[i] > (np.pi/4):
-            print 'angle change too large'
-            return theta
-        if DelAngles[i] < (-np.pi/4):
-            print 'angle change too large'
-            return theta
-    new = NewAngles(theta[0], theta[1], theta[2], theta[3], theta[4], theta[5], theta[6],DelAngles)
-    return new
+
+        for i in range (0,6):
+            if DelAngles[i] > (np.pi/4):
+                print 'angle change too large'
+                return theta
+            if DelAngles[i] < (-np.pi/4):
+                print 'angle change too large'
+                return theta
+        new = NewAngles(theta[0], theta[1], theta[2], theta[3], theta[4], theta[5], theta[6],DelAngles)
+        return new
+    except ZeroDivisionError:
+        print "Division by Zero. Setting old Angles"
+        return theta
 
 
 def jacbuild(th1=0.2, th2=-1.3, th3=0.8, th4=1.2, th5=-0.6, th6=1.9, th7=-0.8, show=0):
