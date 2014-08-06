@@ -8,7 +8,7 @@
 # Modified for NASA GSFC Summer internship 2014 by Aaron Neely
 
 # We require the lego-pi xbox_read class - https://github.com/zephod/lego-pi
-from legopi.lib import xbox_read
+from inputs import xbox_read
 # We also require the RobotArm class - http://mattdyson.org/projects/robotarm
 from armcontrol import RobotArm
 
