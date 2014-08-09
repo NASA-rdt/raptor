@@ -11,18 +11,9 @@
 
 import usb.core as usbdev
 import time
-import RPi.GPIO as GPIO
-import raptorStatusLights as light
+from lightcontrol import raptorStatusLights as lights
+#from lightcontrol import controllerUSBStatus as controller
 
-#  Controller status green and blue pins
-greenLightPin=23
-blueLightPin=24
-
-#  GPIO Setup for lights
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
-GPIO.setup(greenLightPin,GPIO.OUT)
-GPIO.setup(blueLightPin,GPIO.OUT)
 
 # Product information for the arm
 VENDOR = 0x1267
@@ -36,14 +27,11 @@ class RobotArm:
 	"On initialize, attempt to connect to the robotic arm"
 	def __init__(self):
 		#print "Init'ing RobotArm"
-		self.first = 1
-		#print self.first
 		self.device = usbdev.find(idVendor=VENDOR, idProduct=PRODUCT)
 		if(not self.device):
 			raise ValueError("Could not connect to Robotic Arm USB device. Is the arm connected properly? Perhaps you're not running as root?")
 		
 		self.device.set_configuration()
-
 		self.reset()
 		#print "RobotArm now ready!"
 
@@ -65,21 +53,23 @@ class RobotArm:
 		bytes[1] = self.rotate
 		bytes[2] = self.light
 
-		# If no motors are moving, turn the controller status light green
-		if bytes == [0,0,0] or bytes == [0,0,1]:
-		    	light.status_lights('controller','green')
-                # If motors are moving, turn the controller status light blue
-		else:
-                        light.status_lights('controller','blue')
-		# Prevent the controller status light from turning on before
-		# anything is sent
-		if self.first == 1:
-			light.status_lights('controller','off')
-			self.first = 0
-		#print self.first
-		#print bytes
+# CONTROLLER STATUS LIGHT
+
+#		if (bytes == [0,0,0]) or (bytes == [0,0,1]):
+#                        moving = False
+#                else:
+#                        moving = True
+
+#		connected = controller.isConnected()
+#		
+#                if not connected:
+#                        lights.status_lights('controller','off')
+#                elif connected and not moving:
+#                        lights.status_lights('controller', 'green')
+#                elif connected or moving:
+#                        lights.status_lights('controller', 'blue')
+                        
 		return bytes
-	
 	"Reset everything to zero"
 	def reset(self):
 		self.shoulder = 0

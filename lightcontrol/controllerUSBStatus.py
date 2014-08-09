@@ -1,14 +1,17 @@
-#!/usr/bin/python
+ #!/usr/bin/python
 
 #Created by Aaron Neely for NASA GSFC SSCO internship summer 2014
 
-# This script creates a function to check whether a supported controller is connected to the RAPTOR Edge arm kit
+# This script checks whether a supported controller is connected to the RAPTOR Edge arm kit
+# and if any of the motors are currently being moved. It controls the controller status light accordingly
 
 #Import libraries
 import sys
 import usb.core
 import time
-from array import array
+import threading
+import Queue
+import signal
 
 #IDs for SpaceNav
 #  SN_Vendor = 0x46d
@@ -21,39 +24,52 @@ from array import array
 
 
 
-
-
 #ADD DEVICE CODES HERE
 
 #To add new supported device, add its vendorID to the end of the
 #vendor array and its productID to the end of the product array
 # - THEY MUST BE IN THE SAME POSITIONS IN THEIR RESPECTIVE ARRAYS
-vendor = array('l',[0x46d, 0x45e])
-product = array('l',[0xc626, 0x28e])
+vendor = [0x46d, 0x45e]
+product = [0xc626, 0x28e]
+
+
+z = True
+
+length = len(vendor)
+statusQueue = Queue.Queue()
+
+class ControllerThread(threading.Thread):
+
+        def __init__(self,q):
+                self.q = q
+                threading.Thread.__init__(self)
+        def run(self):
+                self.old_x = None
+                while True:
+                        self.x = False
+                        for y in range(0, length):
+                                dev = usb.core.find(idVendor = vendor[y], idProduct = product[y])
+                                if dev is not None:
+                                        self.x = True
+                        if self.x != self.old_x:
+                                self.q.put(self.x)
+                                self.old_x = self.x
+
+
+Thread = ControllerThread(statusQueue)
+Thread.start()
 
 
 
-
-
-
-
-# Function to detect if a supported controller is connected
-def connected():
-    #find all USB devices
-    dev = usb.core.find(find_all=True)
-
-    x=False
-    #loop through devices
-    for cfg in dev:
-        #detect if any of the devices match the vendor and product ID sets in our array
-        for y in range(0, len(vendor)):
-            if (cfg.idVendor == vendor[y]) and (cfg.idProduct == product[y]): 
-                x = True
-                return x
-            else:
-                x = False
-    return x
-
-#if __name__ == '__main__':
-#    x = connected()
-#    print x
+def isConnected():
+        if z:
+                for y in range(0, length):
+                        dev = usb.core.find(idVendor = vendor[y], idProduct = product[y])
+                        if dev is not None:
+                                x =  False
+                z = False
+        x = False
+        if not statusQueue.empty():
+                x = statusQueue.get()
+        return x
+                       

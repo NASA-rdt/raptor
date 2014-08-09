@@ -4,11 +4,10 @@
 import sys
 import usb.core
 import usb.util
-from array import array
 
 #Create arrays to hold codes
-vendor = array('l',[])
-product = array('l',[])
+vendor = []
+product = []
 
 print 'Script to find product and vendor IDs for input device. \n\n'
 

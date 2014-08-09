@@ -58,7 +58,7 @@ def event_stream(deadzone=0,scale=32768):
     device = None
     for dev in devicesNow:
         device = InputDevice(dev)
-        print device.name
+       # print device.name
         if 'Xbox' in device.name:
             #print 'Found:',device.name,'on',dev
             found = True;
