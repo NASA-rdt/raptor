@@ -55,19 +55,23 @@ class RobotArm:
 
 # CONTROLLER STATUS LIGHT
 
-#		if (bytes == [0,0,0]) or (bytes == [0,0,1]):
-#                        moving = False
-#                else:
-#                        moving = True
+		if (bytes == [0,0,0]) or (bytes == [0,0,1]):
+                        moving = False
+                        lights.status_lights('controller','off')
+                else:
+                        moving = True
+                        lights.status_lights('controller','blue')
 
-#		connected = controller.isConnected()
-#		
-#                if not connected:
-#                        lights.status_lights('controller','off')
-#                elif connected and not moving:
-#                        lights.status_lights('controller', 'green')
-#                elif connected or moving:
-#                        lights.status_lights('controller', 'blue')
+		#connected = controller.isConnected()
+                #print controller_connected
+
+		
+               # if not connected:
+               #         lights.status_lights('controller','off')
+               # elif connected and not moving:
+               #         lights.status_lights('controller', 'green')
+               # elif connected or moving:
+               #         lights.status_lights('controller', 'blue')
                         
 		return bytes
 	"Reset everything to zero"
