@@ -57,6 +57,12 @@ try:
 
 
 		curDeltas = input('delta vector  =  ')
+
+		if curDeltas == r:
+			newPos = robot.getCurrentPose()
+			zing = robot.goToXYZ(newPos)
+			print zing
+			print robot.getCurrentPose()
 				
 		#Run Inverse Kinematics and change the motor values
 		#if testor == 1 and crap == 1:
