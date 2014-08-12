@@ -11,9 +11,12 @@
 
 import usb.core as usbdev
 import time
-from lightcontrol import raptorStatusLights as lights
-#from lightcontrol import controllerUSBStatus as controller
+import ConfigParser
 
+config = ConfigParser.RawConfigParser()
+config.add_section('RobotArm')
+config.set('RobotArm','moving','false')
+config.write(open("/home/pi/RobotArmGit/armcontrol/ArmStatus.cfg",'w'))
 
 # Product information for the arm
 VENDOR = 0x1267
@@ -26,6 +29,8 @@ class RobotArm:
 
 	"On initialize, attempt to connect to the robotic arm"
 	def __init__(self):
+                self.moving = False
+                self.oldmoving = False
 		#print "Init'ing RobotArm"
 		self.device = usbdev.find(idVendor=VENDOR, idProduct=PRODUCT)
 		if(not self.device):
@@ -55,24 +60,24 @@ class RobotArm:
 
 # CONTROLLER STATUS LIGHT
 
+
+                
 		if (bytes == [0,0,0]) or (bytes == [0,0,1]):
-                        moving = False
-                        lights.status_lights('controller','off')
+                        self.moving = False
+                        #print self.moving
                 else:
-                        moving = True
-                        lights.status_lights('controller','blue')
+                        self.moving = True
+                        #print self.moving
 
-		#connected = controller.isConnected()
-                #print controller_connected
-
-		
-               # if not connected:
-               #         lights.status_lights('controller','off')
-               # elif connected and not moving:
-               #         lights.status_lights('controller', 'green')
-               # elif connected or moving:
-               #         lights.status_lights('controller', 'blue')
-                        
+                if self.moving != self.oldmoving:        
+                        if self.moving==True:
+                                config.set('RobotArm','moving','true')
+                                config.write(open('/home/pi/RobotArmGit/armcontrol/ArmStatus.cfg','w'))
+                        elif self.moving==False:
+                                config.set('RobotArm','moving','false')
+                                config.write(open('/home/pi/RobotArmGit/armcontrol/ArmStatus.cfg','w'))
+           
+                self.oldmoving = self.moving
 		return bytes
 	"Reset everything to zero"
 	def reset(self):
@@ -161,3 +166,4 @@ class RobotArm:
 			time.sleep(interval)
 			self.setLight(0)
 			time.sleep(interval)
+                
