@@ -235,9 +235,14 @@ def FK(angles,plot=0):
 		mpl.rcParams['legend.fontsize'] = 10
 		fig = plt.figure(1)
 		ax = fig.gca(projection = '3d')
+		axissize = 17
 		ax.set_xlabel('X')
 		ax.set_ylabel('Y')
 		ax.set_zlabel('Z')
+		ax.set_xlim3d(-axissize,axissize)
+		ax.set_ylim3d(-axissize,axissize)
+		ax.set_zlim3d(-axissize,axissize)
+
 
 
 		x = []
