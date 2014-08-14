@@ -66,7 +66,7 @@ try:
 				
 		#Run Inverse Kinematics and change the motor values
 		#if testor == 1 and crap == 1:
-		if curDeltas is not [0,0,0,0,0,0]:
+		if curDeltas != [0,0,0,0,0,0]:
 			newPos = goTo(robot.getCurrentPose(),curDeltas,1)
 			zing = robot.goToXYZ(newPos)
 			print zing
