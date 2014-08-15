@@ -74,10 +74,10 @@ def DLSqr(theta, delta, damp):
 
 
         for i in range (0,6):
-            if DelAngles[i] > (np.pi/4):
+            if DelAngles[i] > (np.pi/2):
                 print 'angle change too large'
                 return theta
-            if DelAngles[i] < (-np.pi/4):
+            if DelAngles[i] < (-np.pi/2):
                 print 'angle change too large'
                 return theta
         new = NewAngles(theta[0], theta[1], theta[2], theta[3], theta[4], theta[5], theta[6],DelAngles)
