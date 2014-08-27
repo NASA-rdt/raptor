@@ -35,13 +35,14 @@ while(True):
                 angle[4]=530
         if angle[5]>580:
                 angle[5]=580
-        #print(angle)
-	pwm.setPWM(0, 0, angle[0])
+        print(angle)
+
+	"""pwm.setPWM(0, 0, angle[0])
 	pwm.setPWM(2, 0, angle[1])
 	pwm.setPWM(4, 0, angle[2])
 	pwm.setPWM(6, 0, angle[3])
 	pwm.setPWM(8, 0, angle[4])
-	pwm.setPWM(10, 0, angle[5])
+	pwm.setPWM(10, 0, angle[5])"""
 
 
 

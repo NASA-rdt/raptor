@@ -63,9 +63,9 @@ while True:
 		elif wiiRoll > 135:
 			robot.getJoint('elbow2').setSpeed(-6);
 		elif wiiPitch < 115:
-			robot.getJoint('wrist_rotate2').setSpeed(6);
-		elif wiiPitch > 130:
 			robot.getJoint('wrist_rotate2').setSpeed(-6);
+		elif wiiPitch > 130:
+			robot.getJoint('wrist_rotate2').setSpeed(6);
 		else:
 			robot.getJoint('wrist_rotate2').setSpeed(0);
 			robot.getJoint('elbow2').setSpeed(0);

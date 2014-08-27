@@ -252,9 +252,8 @@ def FK(angles,plot=0):
 			y.append(position[1,i])
 			z.append(position[2,i])
 		ax.plot(x,y,z,label='Robot Arm')
-		plt.show(block = False)
 		plt.draw()
-		plt.ion()
-		
+
+
 
 	return position[:,7]

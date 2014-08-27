@@ -30,7 +30,7 @@ def goTo( _from, delta, plot = 0, damp = 0.03, whichmethod = 0):
 #th1-7 are current angles (radians)
 #delta_ are wanted changes of endeffector (x, y, z positions (inches), roll, pitch, yaw angles (radians))	
 def FullIK(th1,th2,th3,th4,th5,th6,th7,deltax,deltay,deltaz,deltar,deltap,deltaw):
-    print 'hey doofus, for some reason you\'re using the old IK'
+    print 'You\'re using the old IK. Don\' do that it\'s broken'
     DelAngles = IK(th1, th2, th3, th4, th5, th6, th7, deltax, deltay, deltaz, deltar, deltap, deltaw)
     new = NewAngles(th1, th2, th3, th4, th5, th6, th7, DelAngles)
     return new

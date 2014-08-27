@@ -15,7 +15,7 @@ rotspeed =   0.3
 
 spnav_open()
 
-theta = [np.pi/4,-np.pi/3,np.pi/3,np.pi/2,-np.pi/5,np.pi/6n,p.pi/6]
+theta = [np.pi/4,-np.pi/3,np.pi/3,np.pi/2,-np.pi/5,np.pi/6,np.pi/6]
 EndPos = ForKin.FK(theta,1)
  
 
@@ -77,7 +77,11 @@ try:
 				#Run Inverse Kinematics and change the motor values
 				if curDeltas != [0,0,0,0,0,0]:
 					print curDeltas
-					theta = InKin.goTo(theta,curDeltas,1,damp)
+					newtheta = InKin.goTo(theta,curDeltas,1,damp)
+					if math.isnan(newtheta[2]) is False:
+						theta = newtheta
+					else:
+						print 'returned NAN, setting old theta'
 					EndPos = ForKin.FK(theta,1)
 					print EndPos
 
@@ -109,6 +113,3 @@ except KeyboardInterrupt:
 finally:
 	
 	spnav_close()
-
-
-

@@ -20,7 +20,7 @@ gripper = Joint(8, 'gripper',120,680,400);
 wrist = Joint(6, 'wrist',120,680,496,-90,90);  
 wrist_rotate2 = Joint(7, 'wrist_rotate2',130,680,493,-90,90);  
 wrist_rotate = Joint(5, 'wrist_rotate',120,680,288,-90,90); 
-elbow2 = Joint(4, 'elbow2',120,680,400,0,180);  
+elbow2 = Joint(4, 'elbow2',120,680,400,0,180,1);  
 elbow = Joint(3, 'elbow',120,680,218,-90,90); 
 shoulder = Joint(2, 'shoulder',120,680,493,-180,0); 
 base = Joint(0, 'base',120,680,540,-90,90);  
@@ -57,16 +57,10 @@ try:
 
 
 		curDeltas = input('delta vector  =  ')
-
-		if curDeltas == r:
-			newPos = robot.getCurrentPose()
-			zing = robot.goToXYZ(newPos)
-			print zing
-			print robot.getCurrentPose()
 				
 		#Run Inverse Kinematics and change the motor values
 		#if testor == 1 and crap == 1:
-		if curDeltas != [0,0,0,0,0,0]:
+		if curDeltas is not [0,0,0,0,0,0]:
 			newPos = goTo(robot.getCurrentPose(),curDeltas,1)
 			zing = robot.goToXYZ(newPos)
 			print zing

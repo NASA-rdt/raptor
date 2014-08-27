@@ -1,26 +1,23 @@
 #!/usr/bin/python
-import usb.core as usbdev
-from driveRobotWill2 import RobotArm, Joint
-from legopi.lib.Adafruit_PWM_Servo_Driver import PWM
-from legopi.lib import xbox_read
-import time, thread
+from driveRobotWill2 import RobotArm,Joint, xbox_read
+
 DEADZONE=15000
 
 def main():
 	robot = RobotArm();#this is the robot
-	print "Creating Joints now..."
+	
 	#CREATE THE JOINTS HERE
 	        #Joint ( channel , name, min, max, default) 
-	gripper = Joint(8, 'gripper',120,400,135);   #BLANK
-	wrist = Joint(6, 'wrist',120,680,400);  #Y/P
+	gripper = Joint(8, 'gripper',120,400,400);   #BLANK
+	wrist = Joint(6, 'wrist',120,680,320);  #Y/P
 	wrist_rotate2 = Joint(7, 'wrist_rotate2',130,680,400);  #B/P
-	wrist_rotate = Joint(5, 'wrist_rotate',120,680,400);  #rubberband
+	wrist_rotate = Joint(5, 'wrist_rotate',125,680,400);  #5
 	elbow2 = Joint(4, 'elbow2',120,680,400);   #B/Y
-	elbow = Joint(3, 'elbow',125,680,400);  #P
+	elbow = Joint(3, 'elbow',120,680,400);  #P
 	shoulder = Joint(2, 'shoulder',200,680,400);  #B
-	base = Joint(0, 'base',150,680,400);  #Y
+	base = Joint(0, 'base',120,680,400);  #Y
 	
-	print "Adding Joints"
+	
 	#ADD THE JOINTS BELOW:
 	robot.addJoint(base);
 	robot.addJoint(shoulder);
@@ -31,62 +28,71 @@ def main():
 	robot.addJoint(wrist_rotate);    
 	
 	robot.addJoint(wrist_rotate2);
-	print "starting Loop"
-	loop( robot )
 
-def loop( robot ):	
+	loop(robot)
+
+def loop(robot):	
 	for event in xbox_read.event_stream(deadzone = DEADZONE):
 		#print "Xbox event: %s" % (event);
+		
 		if event.key == 'X1':
 			if event.value > DEADZONE:
 				robot.getJoint('base').setSpeed(-8);
-				
+				print "base ", robot.getJoint('base').currentVal
+
 			elif event.value < -DEADZONE:
 				robot.getJoint('base').setSpeed(8);
-				
+				print "base ", robot.getJoint('base').currentVal
 			else:
-				joint = robot.getJoint('base').setSpeed(0); 
-
+				robot.getJoint('base').setSpeed(0);
+				
 		if event.key == 'Y1':
 			if event.value > DEADZONE:
-				robot.getJoint('shoulder').setSpeed(6);
-	
-			elif event.value < -DEADZONE:
 				robot.getJoint('shoulder').setSpeed(-6);
-				#print "setting speed -3"
+				print "shoulder ", robot.getJoint('shoulder').currentVal
+
+			elif event.value < -DEADZONE:
+				robot.getJoint('shoulder').setSpeed(6);
+				print "shoulder ", robot.getJoint('shoulder').currentVal
 			else:
 				robot.getJoint('shoulder').setSpeed(0);
-		
+				
 		if event.key == 'X2':
 			if event.value > DEADZONE:
 				robot.getJoint('wrist_rotate2').setSpeed(-6);
-	
+				print "Wrist rotate2 ", robot.getJoint('wrist_rotate2').currentVal
+
 			elif event.value < -DEADZONE:
 				robot.getJoint('wrist_rotate2').setSpeed(6);
-				#print "setting speed -3"
+				print "Wrist rotate2 ", robot.getJoint('wrist_rotate2').currentVal
 			else:
 				robot.getJoint('wrist_rotate2').setSpeed(0);
 	
 		if event.key == 'Y2':
 			if event.value > DEADZONE:
 				robot.getJoint('elbow').setSpeed(-6);
-	
+				print "elbow ", robot.getJoint('elbow').currentVal
+
 			elif event.value < -DEADZONE:
 				robot.getJoint('elbow').setSpeed(6);
-				#print "setting speed -3"
+				print "elbow ", robot.getJoint('elbow').currentVal
+
 			else:
 				robot.getJoint('elbow').setSpeed(0);
 	
 		if event.key == 'LB':
 			if event.value == 1:
-				robot.getJoint('elbow2').setSpeed(-6);
-	
+				robot.getJoint('elbow2').setSpeed(6);
+				print "elbow 2 ", robot.getJoint('elbow2').currentVal
+
 			else:
 				robot.getJoint('elbow2').setSpeed(0);
 	
 		if event.key == 'RB':
 			if event.value == 1:
-				robot.getJoint('elbow2').setSpeed(6);
+				robot.getJoint('elbow2').setSpeed(-6);
+				print "elbow 2 ", robot.getJoint('elbow2').currentVal
+
 	
 			else:
 				robot.getJoint('elbow2').setSpeed(0);
@@ -94,6 +100,7 @@ def loop( robot ):
 		if event.key == 'LT':
 			if event.value > 150:
 				robot.getJoint('gripper').setSpeed(9);
+				print "gripper ", robot.getJoint('gripper').currentVal
 	
 			else:
 				robot.getJoint('gripper').setSpeed(0);
@@ -101,27 +108,31 @@ def loop( robot ):
 		if event.key == 'RT':
 			if event.value > 150:
 				robot.getJoint('gripper').setSpeed(-9);
-	
+				print "gripper ", robot.getJoint('gripper').currentVal
+
 			else:
 				robot.getJoint('gripper').setSpeed(0);
 	
 		if event.key == 'du':
 			if event.value == 1:
 				robot.getJoint('wrist').setSpeed(6);
-	
+				print "wrist ", robot.getJoint('wrist').currentVal
+
 			else:
 				robot.getJoint('wrist').setSpeed(0);
 	
 		if event.key == 'dd':
 			if event.value == 1:
 				robot.getJoint('wrist').setSpeed(-6);
-	
+				print "wrist ", robot.getJoint('shoulder').currentVal
+
 			else:
 				robot.getJoint('wrist').setSpeed(0);
 	
 		if event.key == 'dr':
 			if event.value == 1:
 				robot.getJoint('wrist_rotate').setSpeed(-6);
+				print "wrist_rotate ", robot.getJoint('wrist_rotate').currentVal
 	
 			else:
 				robot.getJoint('wrist_rotate').setSpeed(0);
@@ -129,6 +140,7 @@ def loop( robot ):
 		if event.key == 'dl':
 			if event.value == 1:
 				robot.getJoint('wrist_rotate').setSpeed(6);
+				print "wrist_rotate ", robot.getJoint('wrist_rotate').currentVal
 	
 			else:
 				robot.getJoint('wrist_rotate').setSpeed(0);

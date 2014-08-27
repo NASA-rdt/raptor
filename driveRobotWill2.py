@@ -3,22 +3,25 @@ import usb.core as usbdev
 from legopi.lib.Adafruit_PWM_Servo_Driver import PWM
 from legopi.lib import xbox_read
 import time, thread
-from InverseKinematics import goTo
+#from InverseKinematics import goTo
 import numpy as np
+import math
 
 # Product information for the arm
 pwm = PWM(0x40, debug=True)
 
 
 class Joint:
-	def __init__(self, channel, name, minVal, maxVal, defVal = 0, angleOff = 0):
+	def __init__(self, channel, name, minVal, maxVal, defVal = 0, minAng=0, maxAng=0,angleOff = 0):
                 self.channel = channel;
 		self.name = name;
 		self.minVal = minVal;
 		self.maxVal = maxVal;
 		self.defVal = defVal;
 		self.currentVal = defVal;
-		self.angelOff = angleOff
+		self.minAng = minAng;
+		self.maxAng = maxAng;
+		self.angleOff = angleOff
 		self.speed = 0;
 		self.changed=True;
 	def setSpeed(self, speed):
@@ -47,11 +50,17 @@ class Joint:
 		#print 'Updating',self.name;
 		self.delta(self.speed);
 		self.write(self.currentVal);
-	"""def getDegrees(self):
-                value = self.currentVal - self.defVal
-                map(self.currentVal, self.minVal, self.maxVal, 
-                return self.currentVal #map this value into degrees somehow such as:(1024 = 2*np.pi ...."""
-                
+	def getRadians(self):#convert motor values to radians and return
+                rads = self.minAng + (self.maxAng-self.minAng)*(self.currentVal-self.minVal)/(self.maxVal-self.minVal)
+		#rads = degrees*math.pi/180
+                return rads
+	def getMotorVals(self,radVal):
+		#num = int(radVal/(2*math.pi))
+		#radVal = radVal - 2*math.pi*num		
+		#newValDeg = radVal * 180/math.pi
+		newVal = self.minVal + (self.maxVal-self.minVal)*(radVal-self.minAng)/(self.maxAng-self.minAng)
+                return int(newVal)
+	
 class RobotArm:
 
 	def __init__(self, delay = 0.05):
@@ -87,15 +96,19 @@ class RobotArm:
 	        while self.running:
 	                time.sleep(delay);
                 	self.update();
-        def getCurrentPose(self):
+        def getCurrentPose(self): #returns current position of all motors in radians
                 currentPose = []#(0 , 0 , 0, 0 , 0 , 0, 0)
-                index = 0;
+                #index = 0;
                 for joint in self.joints:
-                        currentPose.append(joint.getDegrees())
-                print 'current Pose:',currentPose
-                #add some way to get the angles from the motors and return it in a vector using ()
+			if joint.name is not 'gripper':
+                       		currentPose.append(joint.getRadians())
                 return currentPose
-        def goToXYZ(self,desiredDeltaPose):
-                currentPose = self.getCurrentPose()
-                print 'desired change in pose:',desiredDeltaPose
-                goTo(currentPose, desiredDeltaPose)
+        def goToXYZ(self,newPos):
+                currentPose = []#(0 , 0 , 0, 0 , 0 , 0, 0)
+                for i in range(0,len(self.joints)):
+			if self.joints[i].name is not 'gripper':
+                       		currentPose.append(self.joints[i].getMotorVals(newPos[i]))
+				self.joints[i].set(currentPose[i])
+                return currentPose
+
+

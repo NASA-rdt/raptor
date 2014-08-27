@@ -17,15 +17,15 @@ import math
 
 
 class Joint:
-	def __init__(self,channel,name,minVal,maxVal,defVal = 0, minAng = 0, maxAng = 0,angleOff = 0):
+	def __init__(self,channel,name,minVal,maxVal,defRad = 0, minAng = 0, maxAng = 0,angleOff = 0):
 		self.channel = channel;
 		self.name = name;
 		self.minVal = minVal;
-		delf.maxVal = maxVal;
-		self.defVal = defVal;
-		self.currentVal = defVal;
+		self.maxVal = maxVal;
+		self.currentVal = defRad;
 		self.minAng = minAng;
 		self.maxAng = maxAng;
+		self.defVal = defRad
 		self.angleOff = angleOff;
 		self.speed = 0;
 		self.changed = True;
@@ -41,7 +41,7 @@ class Joint:
 		self.currentVal = value;
 		self.changed = True;
 	def reset(self):
-		self.set(defVal);
+		self.set(self.defVal);
 	def delta(self,inc):
 		if inc != 0:
 			self.set(self.currentVal + inc);
@@ -62,4 +62,47 @@ class Joint:
 		return int(newVal)
 
 class RobotArm:
-	def __init__
+	def __init__(self,delay = 0.05):
+		self.joints = [];
+		thread.start_new_thread(self.run, (delay,));
+		self.running = True;
+	def addJoint(self,joint):
+		self.joints.append(joint);
+		return self.joints.index(joint);
+	def setJoint(self,joint,value):
+		self.joints.get(joint).set(value);
+
+	def getJoint(self,name):
+		try:
+			index = int(name)
+			if name <len(self.joints):
+				return self.joints[index];
+			return None
+		except ValueError:
+			for joint in self.joints:
+				if joint.name == name:
+					return joint;
+			return None; #check for null
+	def setChanged(self):
+		self.changed = True;
+	def update(self):
+		for joints in self.joints:
+			joints.update();
+	def run (self, delay):
+		self.running = True;
+		while self.running:
+			time.sleep(delay);
+			self.update();
+	def getCurrentPose(self): #returns current positions of all motors in radians
+		currentPose = []
+		for joint in self.joints:
+			if joint.name is not 'gripper':
+				currentPose.append(joint.getRadians())
+		return currentPose
+	def goToXYZ(self,newPos):
+		currentPose = []
+		for i in range (0,len(self.joints)):
+			if self.joints[i].name is not 'gripper':
+				currentPose.append(self.joints[i].getMotorVals(newPos[i]))
+			self.joints[i].set(currentPose[i])
+		return currentPose

@@ -3,11 +3,11 @@ from driveRobotWill2 import RobotArm,Joint
 
 DEADZONE=15000
 
-def main():
+#def main():
 	robot = RobotArm();#this is the robot
 	
 	#CREATE THE JOINTS HERE
-	        #Joint ( channel , name, min, max, default) 
+	         #Joint ( channel , name, min, max, default) 
 	gripper = Joint(8, 'gripper',120,400,300);   #BLANK
 	wrist = Joint(6, 'wrist',120,500,415);  #Y/P
 	wrist_rotate2 = Joint(7, 'wrist_rotate2',170,490,240);  #B/P
@@ -29,7 +29,23 @@ def main():
 	
 	robot.addJoint(wrist_rotate2);
 
-        print '*NOT* moving robot...'
+        print 'Robot Arm Ready..'
+
+	try:
+		while True:
+			#
+		
+
+
+
+
+
+
+	except KeyboardInterrupt:
+		print '\nQuitting...'
+	finally:
+
+print '*NOT* moving robot...'
 	#if(inverseKinematics):
 	deltas = (0,0,0,0,0,0)
 	robot.goToXYZ( deltas )
@@ -45,5 +61,5 @@ def main():
 	#this will get xbox commands
 	input('ready?')
 	
-if __name__=='__main__':
-	main()
+#if __name__=='__main__':
+#	main()

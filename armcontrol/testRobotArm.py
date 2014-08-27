@@ -10,29 +10,28 @@ import time
 arm = RobotArm.RobotArm()
 
 print "Moving elbow"
-arm.moveElbow(1)
+arm.moveElbow(100)
 time.sleep(1)
 
 print "Moving wrist as well"
-arm.moveWrist(1)
+arm.moveWrist(100)
 time.sleep(1)
 
 print "Moving base as well"
-arm.moveBase(2)
+arm.moveBase(200)
 time.sleep(3)
 
-print "Stopping"
-arm.reset()
 
-print "Moving elbow back"
-arm.moveElbow(2)
+
+"""print "Moving elbow back"
+arm.moveElbow(200)
 time.sleep(1)
 
 print "Moving wrist back as well"
-arm.moveWrist(2)
+arm.moveWrist(200)
 time.sleep(1)
 
 print "Moving base back as well"
-arm.moveBase(1)
-time.sleep(3)
+arm.moveBase(100)
+time.sleep(3)"""
 
