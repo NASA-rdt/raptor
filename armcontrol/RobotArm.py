@@ -11,12 +11,7 @@
 
 import usb.core as usbdev
 import time
-import ConfigParser
-
-config = ConfigParser.RawConfigParser()
-config.add_section('RobotArm')
-config.set('RobotArm','moving','false')
-config.write(open("/home/pi/RobotArmGit/armcontrol/ArmStatus.cfg",'w'))
+import lightcontrol.raptorStatusLights as lights
 
 # Product information for the arm
 VENDOR = 0x1267
@@ -29,8 +24,6 @@ class RobotArm:
 
 	"On initialize, attempt to connect to the robotic arm"
 	def __init__(self):
-                self.moving = False
-                self.oldmoving = False
 		#print "Init'ing RobotArm"
 		self.device = usbdev.find(idVendor=VENDOR, idProduct=PRODUCT)
 		if(not self.device):
@@ -59,25 +52,14 @@ class RobotArm:
 		bytes[2] = self.light
 
 # CONTROLLER STATUS LIGHT
-
-
                 
 		if (bytes == [0,0,0]) or (bytes == [0,0,1]):
-                        self.moving = False
+                        lights.status_lights('controller','blue',0)
                         #print self.moving
                 else:
-                        self.moving = True
+                        lights.status_lights('controller','blue',1)
                         #print self.moving
-
-                if self.moving != self.oldmoving:        
-                        if self.moving==True:
-                                config.set('RobotArm','moving','true')
-                                config.write(open('/home/pi/RobotArmGit/armcontrol/ArmStatus.cfg','w'))
-                        elif self.moving==False:
-                                config.set('RobotArm','moving','false')
-                                config.write(open('/home/pi/RobotArmGit/armcontrol/ArmStatus.cfg','w'))
-           
-                self.oldmoving = self.moving
+       
 		return bytes
 	"Reset everything to zero"
 	def reset(self):

@@ -28,22 +28,16 @@ GPIO.setup(bootBluePin,GPIO.OUT)
 GPIO.setup(bootRedPin,GPIO.OUT)
 
 #Creating the function
-def status_lights(light,color):
+def status_lights(light,color,switch):
     #Check which light argument has been given
     if (light == "controller") or (light == "Controller") or (light == "CONTROLLER"):
         #Set color based on color argument
         if (color == 'blue') or (color == 'Blue') or (color == 'BLUE'):
-            GPIO.output(controllerBluePin,1)
-            GPIO.output(controllerGreenPin,0)
-            GPIO.output(controllerRedPin,0)
+            GPIO.output(controllerBluePin,switch)
         elif (color == 'green') or (color == 'Green') or (color == 'GREEN'):
-            GPIO.output(controllerGreenPin,1)
-            GPIO.output(controllerBluePin,0)
-            GPIO.output(controllerRedPin,0)
+            GPIO.output(controllerGreenPin,switch)
         elif (color == 'red') or (color == 'Red') or (color == 'RED'):
-            GPIO.output(controllerGreenPin,0)
-            GPIO.output(controllerBluePin,0)
-            GPIO.output(controllerRedPin,1)
+            GPIO.output(controllerRedPin,switch)
         elif (color == 'off') or (color == 'Off') or (color == 'OFF'):
             GPIO.output(controllerGreenPin,0)
             GPIO.output(controllerBluePin,0)
@@ -54,17 +48,11 @@ def status_lights(light,color):
     elif (light == "boot") or (light == "Boot") or (light == 'BOOT'):
         #Set color based on color argument
         if (color == 'blue') or (color == 'Blue') or (color == 'BLUE'):
-            GPIO.output(bootBluePin,1)
-            GPIO.output(bootGreenPin,0)
-            GPIO.output(bootRedPin,0)
+            GPIO.output(bootBluePin,switch)
         elif (color == 'green') or (color == 'Green') or (color == 'GREEN'):
-            GPIO.output(bootGreenPin,1)
-            GPIO.output(bootBluePin,0)
-            GPIO.output(bootRedPin,0)
+            GPIO.output(bootGreenPin,switch)
         elif (color == 'red') or (color == 'Red') or (color == 'RED'):
-            GPIO.output(bootGreenPin,0)
-            GPIO.output(bootBluePin,0)
-            GPIO.output(bootRedPin,1)
+            GPIO.output(bootRedPin,switch)
         elif (color == 'off') or (color == 'Off') or (color == 'OFF'):
             GPIO.output(bootGreenPin,0)
             GPIO.output(bootBluePin,0)

@@ -64,7 +64,7 @@ def event_stream(deadzone=0,scale=32768):
             found = True;
             break
     if not found:
-        print 'Xbox controller not found'
+        #print 'Xbox controller not found'
         return
     
     while True:
