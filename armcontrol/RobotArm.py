@@ -26,9 +26,12 @@ class RobotArm:
 	def __init__(self):
 		#print "Init'ing RobotArm"
 		self.device = usbdev.find(idVendor=VENDOR, idProduct=PRODUCT)
+		lights.status_lights('boot','blue',0)
 		if(not self.device):
+			lights.status_lights('boot','red',1)
 			raise ValueError("Could not connect to Robotic Arm USB device. Is the arm connected properly? Perhaps you're not running as root?")
-		
+		else:
+			lights.status_lights('boot','green',1)
 		self.device.set_configuration()
 		self.reset()
 		#print "RobotArm now ready!"
