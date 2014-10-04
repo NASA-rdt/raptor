@@ -48,9 +48,6 @@ def event_stream(deadzone=0,scale=32768):
     old_value=None
     x=0
     
-    #Start up xboxdrv driver
-    subprocess = os.popen('(sudo xboxdrv -d -D -v --dbus disabled) &','r',65536)
-    time.sleep(1)
     
     #Setup for evdev
     devicesNow = glob.glob('/dev/input/event*')
