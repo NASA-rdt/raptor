@@ -49,7 +49,7 @@ def event_stream(deadzone=0,scale=32768):
     x=0
     
     #Start up xboxdrv driver
-    subprocess = os.popen('(sudo xboxdrv -d -D -v --dbus disabled) &','r',65536)
+    subprocess = os.popen('sudo xboxdrv -d -D -v --dbus disabled','r',65536)
     time.sleep(1)
     
     #Setup for evdev
