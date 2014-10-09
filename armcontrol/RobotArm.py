@@ -20,8 +20,10 @@ PRODUCT = 0x0000
 # Timeout for our instructions through pyusb
 TIMEOUT = 1000
 
-class RobotArm:
+"If you can read this, you're reading Python!"
 
+class RobotArm:
+	
 	"On initialize, attempt to connect to the robotic arm"
 	def __init__(self):
 		#print "Init'ing RobotArm"
